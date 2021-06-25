@@ -2,25 +2,36 @@
   <div class="submit-form">
     <div v-if="!submitted">
       <div class="form-group">
-        <label for="title">Test</label>
+        <label for="item">消費項目</label>
         <input
           type="text"
           class="form-control"
-          id="title"
+          id="item"
           required
-          v-model="detail.title"
-          name="title"
+          v-model="detail.item"
+          name="item"
         />
       </div>
 
       <div class="form-group">
-        <label for="description">Description</label>
+        <label for="amount">金額</label>
+        <input
+            type="number"
+            class="form-control"
+            id="amount"
+            required
+            v-model="detail.amount"
+            name="amount"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="remark">備註</label>
         <input
           class="form-control"
-          id="description"
-          required
-          v-model="detail.description"
-          name="description"
+          id="remark"
+          v-model="detail.remark"
+          name="remark"
         />
       </div>
 
@@ -43,9 +54,9 @@ export default {
     return {
       detail: {
         id: null,
-        title: "",
-        description: "",
-        published: false
+        item: "",
+        amount: 0,
+        remark: ""
       },
       submitted: false
     };
@@ -53,8 +64,9 @@ export default {
   methods: {
     saveBookkeeping() {
       var data = {
-        title: this.detail.title,
-        description: this.detail.description
+        item: this.detail.item,
+        amount: this.detail.amount,
+        remark: this.detail.remark
       };
 
       BookkeepingDataService.create(data)

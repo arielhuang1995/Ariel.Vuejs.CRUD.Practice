@@ -3,35 +3,24 @@
     <h4>Bookkeeping</h4>
     <form>
       <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" class="form-control" id="title"
-          v-model="currentBookkeeping.title"
+        <label for="item">消費品項</label>
+        <input type="text" class="form-control" id="item"
+          v-model="currentBookkeeping.item"
         />
       </div>
       <div class="form-group">
-        <label for="description">Description</label>
-        <input type="text" class="form-control" id="description"
-          v-model="currentBookkeeping.description"
+        <label for="amount">金額</label>
+        <input type="number" class="form-control" id="amount" min=1 step=1
+               v-model="currentBookkeeping.amount"
         />
       </div>
-
       <div class="form-group">
-        <label><strong>Status:</strong></label>
-        {{ currentBookkeeping.published ? "Published" : "Pending" }}
+        <label for="remark">備註</label>
+        <input type="text" class="form-control" id="remark"
+          v-model="currentBookkeeping.remark"
+        />
       </div>
     </form>
-
-    <button class="badge badge-primary mr-2"
-      v-if="currentBookkeeping.published"
-      @click="updatePublished(false)"
-    >
-      UnPublish
-    </button>
-    <button v-else class="badge badge-primary mr-2"
-      @click="updatePublished(true)"
-    >
-      Publish
-    </button>
 
     <button class="badge badge-danger mr-2"
       @click="deleteBookkeeping"
@@ -80,29 +69,35 @@ export default {
      * 更新 狀態
      * @param status
      */
-    updatePublished(status) {
-      let data = {
-        id: this.currentBookkeeping.id,
-        title: this.currentBookkeeping.title,
-        description: this.currentBookkeeping.description,
-        published: status
-      };
-
-      BookkeepingDataService.update(this.currentBookkeeping.id, data)
-        .then(response => {
-          this.currentBookkeeping.published = status;
-          console.log(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
+    // updatePublished(status) {
+    //   let data = {
+    //     id: this.currentBookkeeping.id,
+    //     title: this.currentBookkeeping.title,
+    //     description: this.currentBookkeeping.description,
+    //     published: status
+    //   };
+    //
+    //   BookkeepingDataService.update(this.currentBookkeeping.id, data)
+    //     .then(response => {
+    //       this.currentBookkeeping.published = status;
+    //       console.log(response.data);
+    //     })
+    //     .catch(e => {
+    //       console.log(e);
+    //     });
+    // },
 
     /**
      * 更新 Bookkeeping
      */
     updateBookkeeping() {
-      BookkeepingDataService.update(this.currentBookkeeping.id, this.currentBookkeeping)
+      let data = {
+        id: this.currentBookkeeping.id,
+        item: this.currentBookkeeping.item,
+        amount: this.currentBookkeeping.amount,
+        remark: this.currentBookkeeping.remark
+      };
+      BookkeepingDataService.update(data)
         .then(response => {
           console.log(response.data);
           this.message = 'The Data was updated successfully!';
@@ -117,13 +112,13 @@ export default {
      */
     deleteBookkeeping() {
       BookkeepingDataService.delete(this.currentBookkeeping.id)
-        .then(response => {
-          console.log(response.data);
-          this.$router.push({ name: "bookkeeping" });
-        })
-        .catch(e => {
-          console.log(e);
-        });
+          .then(response => {
+            console.log(response.data);
+            this.$router.push({ name: "bookkeeping" });
+          })
+          .catch(e => {
+            console.log(e);
+          });
     }
   },
   mounted() {
